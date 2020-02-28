@@ -26,6 +26,7 @@
     "watch": "webpack -w"
   },
   "dependencies": {
+    "clean-css": "^4.2.3",
     "constantinople": "^4.0.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
@@ -47,6 +48,7 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "serialize-javascript": "^2.1.2",
+    "uglifyjs": "^2.4.11",
     "ws": "^7.2.1"
   },
   "devDependencies": {

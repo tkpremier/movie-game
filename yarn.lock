@@ -2242,7 +2242,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-clean-css@4.2.x:
+clean-css@4.2.x, clean-css@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.2.3.tgz#507b5de7d97b48ee53d84adb0160ff6216380f78"
   integrity sha512-VcMWDN54ZN/DS+g58HYL5/n4Zrqe8vHJpGA8KdgUXFU4fuP/aHNw8eld9SyEIyabIMJX/0RaY/fplOo5hYLSFA==
@@ -8869,6 +8869,11 @@ uglify-to-browserify@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz#6e0924d6bda6b5afe349e39a6d632850a0f882b7"
   integrity sha1-bgkk1r2mta/jSeOabWMoUKD4grc=
+
+uglifyjs@^2.4.11:
+  version "2.4.11"
+  resolved "https://registry.yarnpkg.com/uglifyjs/-/uglifyjs-2.4.11.tgz#3440d64e045759589524418eb641c68bb90d113e"
+  integrity sha1-NEDWTgRXWViVJEGOtkHGi7kNET4=
 
 undefsafe@^2.0.2:
   version "2.0.3"

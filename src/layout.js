@@ -1,10 +1,8 @@
 
 
 function template({
-  data,
   title,
-  content = '',
-  type = 'react'
+  content = ''
 }) {
   const page = `<!DOCTYPE html>
           <html lang="en">
@@ -22,5 +20,3 @@ function template({
 }
 
 module.exports = template;
-
-// 

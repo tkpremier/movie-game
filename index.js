@@ -1,6 +1,6 @@
 // Include the cluster module
+const http = require('http');
 const createError = require('http-errors');
-
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -10,23 +10,53 @@ const logger = require('morgan');
 const layout = require('./src/layout');
 const { authorize, listFiles, getFile } = require('./src/drive');
 const ssr = require('./dist/app.bundle');
-
+const WebSocket = require('ws');
 dotenv.config();
 const app = express();
+const port = process.env.PORT || 3000;
+
+// const server = http.createServer(app);
+const wss = new WebSocket.Server({ port: 3001 });
+
+wss.on('connection', (ws) => {
+  // console.log('connected ws: ', ws);
+  ws.on('message', (message) => {
+    const broadcastRegex = /^broadcast\:/;
+    console.log('taking messages');
+    if (broadcastRegex.test(message)) {
+      message = message.replace(broadcastRegex, '');
+
+      //send back the message to the other clients
+      wss.clients
+        .forEach(client => {
+          if (client != ws) {
+            client.send(`Hello, broadcast message -> ${message}`);
+          }
+        });
+
+    } else {
+      ws.send(`Hello, you sent -> ${message}`);
+    }
+  });
+
+  ws.send('websocket created');
+});
+
 const initialState = {
-    isFetching: true,
-    name: 'Kyungtae',
-    type: 'server'
-  };
+  isFetching: true,
+  name: 'Kyungtae',
+  type: 'server'
+};
 async function indexRouter(req, res) {
-    const response = layout({
-      initialState,
-      title: 'Google T',
-      type: 'react',
-      data: []
-    });
-    res.setHeader('Cache-Control', 'assets, max-age=604800');
-    res.send(response);
+  const content = ssr({ data: [] });
+  const response = layout({
+    initialState,
+    title: 'Google T',
+    type: 'react',
+    content
+  });
+  res.setHeader('Cache-Control', 'assets, max-age=604800');
+  res.send(response);
 };
 
 app.use('/dist', express.static(path.resolve(__dirname, 'dist')));
@@ -58,9 +88,6 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.send(err);
 });
-
-
-var port = process.env.PORT || 3000;
 
 app.listen(port, function () {
   console.log('Server running at http://127.0.0.1:' + port + '/');

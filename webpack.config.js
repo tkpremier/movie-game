@@ -6,7 +6,7 @@ module.exports = [
   {
     mode: 'development',
     entry: {
-      app: './src/server-bundle.jsx',
+      app: './src/Server.jsx',
     },
     output: {
       filename: '[name].bundle.js',
@@ -15,10 +15,11 @@ module.exports = [
       libraryTarget: 'commonjs2',
       path: path.resolve(__dirname, 'dist'),
     },
-    
+
     module: {
       rules: [
-        { test: /\.jsx$/,
+        {
+          test: /\.jsx$/,
           exclude: /(node_modules)/,
           use: {
             loader: 'babel-loader',
@@ -53,7 +54,7 @@ module.exports = [
                   }
                 ]
               ]
-            } 
+            }
           }
         }
       ]
@@ -79,10 +80,11 @@ module.exports = [
       filename: '[name].bundle.js',
       path: path.resolve(__dirname, 'assets'),
     },
-    
+
     module: {
       rules: [
-        { test: /\.jsx$/,
+        {
+          test: /\.jsx$/,
           exclude: /(node_modules)/,
           use: {
             loader: 'babel-loader',
@@ -117,7 +119,7 @@ module.exports = [
                   }
                 ]
               ]
-            } 
+            }
           }
         }
       ]

@@ -15,14 +15,14 @@ const returnSorted = (files, sortString = 'createdTime-asc') => {
   return files.filter(file => sortString.indexOf('viewed') > -1
     ? (file.viewedByMe)
     : file
-    )
-  .sort((a, b) => {
-    const asc = sortString.indexOf('asc') > -1;
-    const prop = sortString.split('-')[0];
-    const dateA = new Date(a[prop]);
-    const dateB = new Date(b[prop]);
-    return asc ? (dateA < dateB) : !(dateA > dateB)
-  });  
+  )
+    .sort((a, b) => {
+      const asc = sortString.indexOf('asc') > -1;
+      const prop = sortString.split('-')[0];
+      const dateA = new Date(a[prop]);
+      const dateB = new Date(b[prop]);
+      return asc ? (dateA < dateB) : !(dateA > dateB)
+    });
 }
 
 const getData = (val) => {
@@ -33,26 +33,22 @@ const getData = (val) => {
       'Authorization': `Bearer ${accessToken}`
     }
   })
-  .then((response) => {
-    return response.json();
-  });
+    .then((response) => {
+      return response.json();
+    });
 }
 
 const Grid = ({ data }) => {
-  const [ nextData , setNextData ] = useState(data);
+  const [nextData, setNextData] = useState(data);
   const handleData = (e) => {
     e.preventDefault();
     const data = serialize(e.target, { hash: true });
     console.log('sortData e: ', data);
     const type = Object.keys(data)[0];
     const value = data[type];
-    // getData(`${type}/?query=${value}`)
-    //   .then(res => {
-
-
-    //   })
-    //   .catch(err => {
-    //   });
+    getData(`${type}/?query=${value}`)
+      .then(res => console.log('res: ', res))
+      .catch(err => console.log('err: ', err));
     // const sorted = returnSorted(nextData.files, e.target.value);
     // setNextData({
     //   ...nextData,
@@ -60,20 +56,21 @@ const Grid = ({ data }) => {
     // });
   }
   return (
-      <section className="controls">
-        <form id="person" onSubmit={handleData}>
-          <input type="text" name='person' />
-          <input type="submit" value="Get Person Data" />
-        </form>
-        <form id="movie" onSubmit={handleData}>
-          <input type="text" name='movie' />
-          <input type="submit" value="Get Movie Data" />
-        </form>
-      </section>
+    <section className="controls">
+      <form id="person" onSubmit={handleData}>
+        <input type="text" name='person' />
+        <input type="submit" value="Get Person Data" />
+      </form>
+      <form id="movie" onSubmit={handleData}>
+        <input type="text" name='movie' />
+        <input type="submit" value="Get Movie Data" />
+      </form>
+    </section>
   );
 };
 
 Grid.defaultProps = {
   data: []
 };
+
 export default Grid;

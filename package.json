@@ -15,13 +15,13 @@
     "test": "jest",
     "babel": "babel src -d views",
     "prebuild": "yarn install --no-save",
-    "build": "yarn run webpack",
-    "presass": "yarn run babel",
+    "build": "webpack",
+    "presass": "babel",
     "sass": "node ./views/styles.js ./src/styles.scss",
     "sass-watch": "node ./views/styles.js ./src/styles.scss watch",
-    "prestart": "yarn run build",
+    "prestart": "yarn build",
     "start": "node index.js",
-    "nodemon": "nodemon app.js",
+    "nodemon": "nodemon",
     "webpack": "webpack",
     "watch": "webpack -w"
   },
@@ -46,7 +46,8 @@
     "readline": "^1.3.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
-    "serialize-javascript": "^2.1.2"
+    "serialize-javascript": "^2.1.2",
+    "ws": "^7.2.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",

@@ -1,5 +1,6 @@
 // Include the cluster module
 const http = require('http');
+const fetch = require('node-fetch');
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -8,6 +9,7 @@ const fsp = require('fs').promises;
 const dotenv = require('dotenv');
 const logger = require('morgan');
 const layout = require('./src/layout');
+const { apiKey, themoviedb, accessToken } =require('./src/constants');
 const { authorize, listFiles, getFile } = require('./src/drive');
 const ssr = require('./dist/app.bundle');
 const WebSocket = require('ws');
@@ -15,32 +17,43 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+const handleResponse = function (response) {
+  if (!response.ok) {
+    return response.json().then(error => {
+      console.error('API ERROR: ', error);
+      throw new Error(error.message);
+    });
+  }
+  return response.json();
+};
+
 // const server = http.createServer(app);
 const wss = new WebSocket.Server({ port: 3001 });
 
 wss.on('connection', (ws) => {
   // console.log('connected ws: ', ws);
-  ws.on('message', (message) => {
+  ws.on('message', (e) => {
     const broadcastRegex = /^broadcast\:/;
-    console.log('taking messages: ', message);
     // if (broadcastRegex.test(message)) {
     //   message = message.replace(broadcastRegex, '');
 
     //   //send back the message to the other clients
-    //   wss.clients
-    //     .forEach(client => {
-    //       if (client != ws) {
-    //         client.send(`Hello, broadcast message -> ${message}`);
-    //       }
-    //     });
+    
 
     // } else {
     //   ws.send(`Hello, you sent -> ${message}`);
     // }
-    ws.send(`Hello, you sent -> ${message}`);
+      wss.clients
+        .forEach(client => {
+          client.send(e);
+          // if (client != ws) {
+          //   client.send(`Hello, broadcast message -> ${message}`);
+          // }
+        });
+    // ws.send(message.data);
   });
 
-  ws.send('websocket created');
+  ws.send([]);
 });
 
 const initialState = {
@@ -48,13 +61,23 @@ const initialState = {
   name: 'Kyungtae',
   type: 'server'
 };
+
+async function getTMDBConfigs() {
+  const configs = await fetch(`${themoviedb}/configuration?api_key=${apiKey}`).then(handleResponse);
+  return configs;
+}
 async function indexRouter(req, res) {
-  const content = ssr({ data: [] });
+  const tmdbConfigs = await getTMDBConfigs()
+    .then(res => res)
+    .catch(err => {console.log('err', err);  return err;});
+    console.log('tmdbConfigs: ', tmdbConfigs);
+  const content = ssr({ data: [], tmdbConfigs });
   const response = layout({
     initialState,
     title: 'Google T',
     type: 'react',
-    content
+    content,
+    tmdbConfigs: JSON.stringify(tmdbConfigs)
   });
   res.setHeader('Cache-Control', 'assets, max-age=604800');
   res.send(response);

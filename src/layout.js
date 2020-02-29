@@ -2,7 +2,8 @@
 
 function template({
   title,
-  content = ''
+  content = '',
+  tmdbConfigs = null
 }) {
   const page = `<!DOCTYPE html>
           <html lang="en">
@@ -13,6 +14,7 @@ function template({
           <body>
             <div id="app">${content}</div>
           </body>
+          <script>window.___client = ${tmdbConfigs}</script>
           <script src="/assets/client.bundle.js" type="text/javascript"></script>
           </html>
           `;

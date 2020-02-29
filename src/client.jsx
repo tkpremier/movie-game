@@ -4,9 +4,11 @@ import { hydrate } from 'react-dom';
 import Grid from './Grid';
 
 (function () {
-  
-  hydrate(
-    <Grid data={[]} />,
-    document.querySelector('#app')
-  );
+  const ws = new WebSocket(`ws://${location.hostname}:3001`);
+  ws.onopen = () => {
+    hydrate(
+      <Grid data={[]} ws={ws} />,
+      document.querySelector('#app')
+    );
+  }
 }());

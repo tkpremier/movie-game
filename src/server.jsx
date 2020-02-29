@@ -4,6 +4,6 @@ import Grid from './Grid';
 
 export default function ssr(props) {
   return ReactDOMServer.renderToString(
-    <Grid data={props.data} />
+    <Grid data={props.data} ws={null} />
   );
 };

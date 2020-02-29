@@ -22,21 +22,22 @@ wss.on('connection', (ws) => {
   // console.log('connected ws: ', ws);
   ws.on('message', (message) => {
     const broadcastRegex = /^broadcast\:/;
-    console.log('taking messages');
-    if (broadcastRegex.test(message)) {
-      message = message.replace(broadcastRegex, '');
+    console.log('taking messages: ', message);
+    // if (broadcastRegex.test(message)) {
+    //   message = message.replace(broadcastRegex, '');
 
-      //send back the message to the other clients
-      wss.clients
-        .forEach(client => {
-          if (client != ws) {
-            client.send(`Hello, broadcast message -> ${message}`);
-          }
-        });
+    //   //send back the message to the other clients
+    //   wss.clients
+    //     .forEach(client => {
+    //       if (client != ws) {
+    //         client.send(`Hello, broadcast message -> ${message}`);
+    //       }
+    //     });
 
-    } else {
-      ws.send(`Hello, you sent -> ${message}`);
-    }
+    // } else {
+    //   ws.send(`Hello, you sent -> ${message}`);
+    // }
+    ws.send(`Hello, you sent -> ${message}`);
   });
 
   ws.send('websocket created');

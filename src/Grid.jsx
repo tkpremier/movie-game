@@ -38,8 +38,16 @@ const getData = (val) => {
     });
 }
 
-const Grid = ({ data }) => {
+const Grid = ({ data, ws }) => {
   const [nextData, setNextData] = useState(data);
+  useEffect(() => {
+    ws.onmessage = (e) => {
+      console.log('message: ', e);
+    }
+    // ws.on('open', () => {
+    //   console.log('ayyyyy we open on client');
+    // });
+  }, []);
   const handleData = (e) => {
     e.preventDefault();
     const data = serialize(e.target, { hash: true });
@@ -47,7 +55,7 @@ const Grid = ({ data }) => {
     const type = Object.keys(data)[0];
     const value = data[type];
     getData(`${type}/?query=${value}`)
-      .then(res => console.log('res: ', res))
+      .then(res => ws.send(res))
       .catch(err => console.log('err: ', err));
     // const sorted = returnSorted(nextData.files, e.target.value);
     // setNextData({

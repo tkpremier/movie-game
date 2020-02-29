@@ -53,7 +53,7 @@ wss.on('connection', (ws) => {
     // ws.send(message.data);
   });
 
-  ws.send([]);
+  // ws.send('[]')
 });
 
 const initialState = {
@@ -69,8 +69,14 @@ async function getTMDBConfigs() {
 async function indexRouter(req, res) {
   const tmdbConfigs = await getTMDBConfigs()
     .then(res => res)
-    .catch(err => {console.log('err', err);  return err;});
-    console.log('tmdbConfigs: ', tmdbConfigs);
+    .catch(err => {
+      console.log('err', err);
+      return {
+        images: {
+          base_url: '/'
+        }
+      };
+    });
   const content = ssr({ data: [], tmdbConfigs });
   const response = layout({
     initialState,

@@ -39,7 +39,7 @@ const movie = {
   size: 'w185'
 }
 
-const types = {
+const allTypes = {
   movie,
   person
 };
@@ -58,47 +58,36 @@ const getData = (val) => {
 
 const Grid = ({ tmdbConfigs, data, ws }) => {
   const { images } = tmdbConfigs;
-  const base_url = 'http://image.tmdb.org/t/p/';
-  const profile_sizes = 'w185';
   const types = ['person', 'movie'];
-  const [ currentType, setType ] = useState(0);
+  const [ currentType, setType ] = useState(types[0]);
+  const [ imageKey, useImageKey ] = useState(allTypes[currentType]['imageKey'])
   const [nextData, setNextData] = useState(data);
   const [ currentMovie, setMovie ] = useState('');
   const [ options, setOptions ] = useState([]);
   useEffect(() => {
     ws.onmessage = (e) => {
+      console.log('e: ', e);
       const json = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
       console.log('json: ', json);
       if (json.length > 1) {
         // console.log(json.length);
+        useImageKey(allTypes[currentType]['imageKey']);
         setOptions(json);
         return;
       };
       setOptions([]);
 
       Array.isArray(json) ? setNextData(json) : null;
-      setType()
     }
-    // ws.on('open', () => {
-    //   console.log('ayyyyy we open on client');
-    // });
   }, []);
   const handleData = (e) => {
     e.preventDefault();
     const data = serialize(e.target, { hash: true });
-    console.log('sortData e: ', data);
     const type = Object.keys(data)[0];
     const value = data[type];
     getData(`${type}/?query=${value}`)
-      .then(res => {
-        console.log('res: ', res);
-        ws.send(JSON.stringify(res.results));})
+      .then(res => ws.send(JSON.stringify(res.results)))
       .catch(err => console.log('err: ', err));
-    // const sorted = returnSorted(nextData.files, e.target.value);
-    // setNextData({
-    //   ...nextData,
-    //   files: sorted
-    // });
   }
   console.log('nextData: ', nextData);
   return (
@@ -119,7 +108,18 @@ const Grid = ({ tmdbConfigs, data, ws }) => {
       {options.length > 0
         ? (
         <ul>
-          {options.map(o => <li>{JSON.stringify(o)}</li>)}
+          {options.map(o => {
+            console.log('allTypes[currentType]: ', allTypes[currentType]);
+            console.log('o: ', o.name);
+            // const name = o[]
+            return (
+              <li>
+                <img
+                  src={`${images.base_url}${allTypes[currentType]['size']}${o[allTypes[currentType]['imageKey']]}`}
+                />
+            </li>);
+          
+          })}
         </ul>
         )
         : null

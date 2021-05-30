@@ -50,7 +50,7 @@
     "redux-thunk": "^2.3.0",
     "serialize-javascript": "^2.1.2",
     "uglifyjs": "^2.4.11",
-    "ws": "^7.2.1"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",

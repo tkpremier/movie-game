@@ -76,7 +76,7 @@
     "jest": "^24.8.0",
     "json-loader": "^0.5.7",
     "mocha": "^6.1.4",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "nodemon": "^1.11.0",
     "postcss": "^7.0.16",
     "sass-loader": "^7.1.0",
